@@ -14,8 +14,6 @@ Para a Visualização dos Dados(DataViz) ainda será analisado qual ferramenta u
 
 ## 🛠️ Sendo Construído com
 
-Mencione as ferramentas que você usou para criar seu projeto
-
 * [Draw.io](https://app.diagrams.net/?mode=google) - Aplicativo para a Modelagem das ER e Dimensional.
 * [Google Cloud](https://cloud.google.com/?hl=pt-BR) - Ferramenta Cloud que vai ser utilizada.
 * [Visual Code](https://code.visualstudio.com/download) - IDE utilizada para construção dos Scripts em python.
