@@ -2,9 +2,19 @@ import yfinance as yfin
 from pandas_datareader import data as web
 import pandas as pd
 import datetime
+import sqlite3
+
+connection = sqlite3.connect("test.db")
+cursor = connection.cursor()
 
 
-
+def CreateTableCotacao():
+    cursor.execute("""CREATE TABLE IF NOT EXISTS Cotacao
+                (CodigoCotacao INTEGER PRIMARY KEY
+                    ,CodigoTicker INTEGER
+                    ,CodigoInstituicao INTEGER
+                    ,FOREIGN KEY(CodigoTicker) REFERENCES Ticker(CodigoTicker)
+                   )""")
 
 
 def dataframe():
