@@ -1,7 +1,14 @@
 import streamlit as st
-import pandas as pd
+import investpy as inv
+from Ticker import Ticker
 
 st.set_page_config(page_title="InvestimentoInfoPy")
+
+
+def access_list():
+    lista_tickers = inv.get_stocks_list("brazil")
+    return lista_tickers
+
 
 with st.container():
     st.subheader("InvestimentoInfoPy")
@@ -11,3 +18,9 @@ with st.container():
     st.write("---")
 
 
+option = st.selectbox(
+    'Escolha um ticker?',
+    access_list())
+
+st.write(Ticker.processo_completo(Ticker,ticker_symbol = option))
+st.write('Você selecionou:', option)
