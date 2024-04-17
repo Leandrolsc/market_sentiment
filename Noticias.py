@@ -7,7 +7,7 @@ from LeIA import SentimentIntensityAnalyzer
 analyzer = SentimentIntensityAnalyzer()
 
 
-connection = sqlite3.connect("test.db")
+connection = sqlite3.connect("InvestimentoInfoPy.db")
 cursor = connection.cursor()
 
 def analyze_sentiment(noticia):
