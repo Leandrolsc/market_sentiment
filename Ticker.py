@@ -30,14 +30,38 @@ class Ticker():
         df = pd.DataFrame(columns=['Ticker','Industry','Sector','fullTimeEmployees','LongName','lastDividendValue','WebSite','EnterpriseValue','RecomendationMean'])
         ticker_list = {}
         ticker_list['Ticker'] = ticker
-        ticker_list['Industry'] = ticker_dict['industry'] 
-        ticker_list['Sector'] = ticker_dict['sector']
-        ticker_list['fullTimeEmployees'] = ticker_dict['fullTimeEmployees']  
-        ticker_list['LongName'] = ticker_dict['longName']
-        ticker_list['lastDividendValue'] = ticker_dict['lastDividendValue']
-        ticker_list['WebSite'] = ticker_dict['website']
-        ticker_list['EnterpriseValue'] = ticker_dict['enterpriseValue']
-        ticker_list['RecomendationMean'] = ticker_dict['recommendationMean']
+        try:
+            ticker_list['Industry'] = ticker_dict['industry'] 
+        except KeyError:
+            ticker_list['Industry'] = ''
+        try:
+            ticker_list['Sector'] = ticker_dict['sector']
+        except KeyError:
+            ticker_list['Sector'] = ''
+        try:
+            ticker_list['fullTimeEmployees'] = ticker_dict['fullTimeEmployees']  
+        except KeyError:
+            ticker_list['fullTimeEmployees'] = 0
+        try:
+            ticker_list['LongName'] = ticker_dict['longName']
+        except KeyError:
+            ticker_list['LongName'] = ''
+        try:
+            ticker_list['lastDividendValue'] = ticker_dict['lastDividendValue']
+        except KeyError:
+            ticker_list['lastDividendValue'] = 0
+        try:
+            ticker_list['WebSite'] = ticker_dict['website']
+        except KeyError:
+            ticker_list['WebSite'] = ''
+        try:
+            ticker_list['EnterpriseValue'] = ticker_dict['enterpriseValue']
+        except KeyError:
+            ticker_list['EnterpriseValue'] = 0
+        try:
+            ticker_list['RecomendationMean'] = ticker_dict['recommendationMean']
+        except KeyError:
+            ticker_list['RecomendationMean'] = 0
         ticker_list = pd.DataFrame(ticker_list, index=[0])
         df = pd.concat([df, ticker_list], ignore_index=True)
         return df
