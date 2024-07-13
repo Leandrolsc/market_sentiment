@@ -1,6 +1,7 @@
 import yfinance as yfin
 import pandas as pd
 import sqlite3
+import datetime
 
 class Ticker():
     def __init__(self,ticker_symbol):
@@ -19,15 +20,18 @@ class Ticker():
                         ,WebSite TEXT
                         ,EnterpriseValue DECIMAL
                         ,RecomendationMean DECIMAL
+                        ,currentPrice DECIMAL
                     );"""
         cursor.execute(create_table)
+        return print('Tabela Ticker criada com sucesso')
+
 
 
     def get_ticker(self,ticker_symbol):
         ticker = ticker_symbol
         ticker_dict = yfin.Ticker(f"{ticker}.SA")
         ticker_dict = ticker_dict.info
-        df = pd.DataFrame(columns=['Ticker','Industry','Sector','fullTimeEmployees','LongName','lastDividendValue','WebSite','EnterpriseValue','RecomendationMean'])
+        df = pd.DataFrame(columns=['Ticker','Industry','Sector','fullTimeEmployees','LongName','lastDividendValue','WebSite','EnterpriseValue','RecomendationMean','currentPrice'])
         ticker_list = {}
         ticker_list['Ticker'] = ticker
         try:
@@ -62,56 +66,38 @@ class Ticker():
             ticker_list['RecomendationMean'] = ticker_dict['recommendationMean']
         except KeyError:
             ticker_list['RecomendationMean'] = 0
+        try:
+            ticker_list['currentPrice'] = ticker_dict['currentPrice']
+        except KeyError:
+            ticker_list['currentPrice'] = 0
         ticker_list = pd.DataFrame(ticker_list, index=[0])
         df = pd.concat([df, ticker_list], ignore_index=True)
         return df
 
+    def truncate_table(self,ticker_symbol):
+        connection = sqlite3.connect("InvestimentoInfoPy.db")
+        cursor = connection.cursor()
+        Ticker.CreateTableTicker(self)
+        truncate = f"""DELETE FROM Ticker WHERE Ticker = '{ticker_symbol}'"""
+        cursor.execute(truncate)
+        connection.commit()
+        cursor.close()
 
     def Insert_ticker(self,df):
         connection = sqlite3.connect("InvestimentoInfoPy.db")
         cursor = connection.cursor()
         Ticker.CreateTableTicker(self)
-        ticker = str(df['Ticker'][0])
+        df['Ticker'] = df['Ticker'].apply(lambda x:str(x) if x is not None else '')
+        df['Industry'] = df['Industry'].apply(lambda x: str(x) if x is not None else '')
+        df['Sector'] = df['Sector'].apply(lambda x: str(x) if x is not None else '')
+        df['fullTimeEmployees'] = df['fullTimeEmployees'].apply(lambda x: int(x) if x is not None else 0)
+        df['LongName'] = df['LongName'].apply(lambda x: str(x) if x is not None else '')
+        df['lastDividendValue'] = df['lastDividendValue'].apply(lambda x: float(x) if x is not None else 0)
+        df['WebSite'] = df['WebSite'].apply(lambda x: str(x) if x is not None else '')
+        df['EnterpriseValue'] = df['EnterpriseValue'].apply(lambda x: float(x) if x is not None else 0)
+        df['RecomendationMean'] = df['RecomendationMean'].apply(lambda x: float(x) if x is not None else 0)
+        df['currentPrice'] = df['currentPrice'].apply(lambda x: float(x) if x is not None else 0)
 
-        if df['Industry'][0] is not None:
-            Industry = str(df['Industry'][0])
-        else:
-            Industry = ''
-
-        if df['Sector'][0] is not None:
-            Sector = str(df['Sector'][0])
-        else:
-            Sector = ''
-
-        if df['fullTimeEmployees'].iloc[0] is not None:
-            fullTimeEmployees = int(df['fullTimeEmployees'].iloc[0])
-        else:
-            fullTimeEmployees = 0
-
-        if df['LongName'][0] is not None:
-            LongName = str(df['LongName'][0])
-        else:
-            LongName = ''
-        
-        if df['lastDividendValue'].iloc[0] is not None:
-            lastDividendValue = float(df['lastDividendValue'].iloc[0])
-        else:
-            lastDividendValue = 0
-        
-        if df['WebSite'][0] is not None:
-            WebSite = str(df['WebSite'][0])
-        else:
-            WebSite = ''
-
-        if df['EnterpriseValue'].iloc[0] is not None:
-            EnterpriseValue = float(df['EnterpriseValue'].iloc[0])
-        else:
-            EnterpriseValue = ''
-
-        if df['RecomendationMean'].iloc[0] is not None:
-            RecomendationMean = float(df['RecomendationMean'].iloc[0])
-        else:
-            RecomendationMean = 0
 
         insert = """INSERT INTO Ticker (Ticker
                                                 ,Industry
@@ -121,7 +107,8 @@ class Ticker():
                                                 ,lastDividendValue
                                                 ,WebSite
                                                 ,EnterpriseValue
-                                                ,RecomendationMean)
+                                                ,RecomendationMean
+                                                ,currentPrice)
                         VALUES(?
                                 ,?
                                 ,?
@@ -130,9 +117,10 @@ class Ticker():
                                 ,?
                                 ,?
                                 ,?
+                                ,?
                                 ,?);"""
-        dados = (ticker, Industry, Sector, fullTimeEmployees, LongName,lastDividendValue,WebSite,EnterpriseValue,RecomendationMean)
-        cursor.execute(insert, dados)
+        dados = (df.values.tolist())
+        cursor.executemany(insert, dados)
         connection.commit()
         print('Ticker inserido com sucesso no Banco de Dados')
         cursor.close()
@@ -142,15 +130,30 @@ class Ticker():
         connection = sqlite3.connect("InvestimentoInfoPy.db")
         cursor = connection.cursor()
         df = Ticker.get_ticker(self,ticker_symbol)
+        Ticker.truncate_table(self,ticker_symbol)
         Ticker.Insert_ticker(self,df)
-        select = """SELECT * FROM Ticker"""
+        select = f"""SELECT * FROM Ticker WHERE Ticker = '{ticker_symbol}'"""
         cursor.execute(select)
         rows = cursor.fetchall()
+        connection.commit()
+        cursor.close()
+     
+        ticker_table = pd.DataFrame(rows,columns=['Ticker','Industry','Sector','fullTimeEmployees','LongName','lastDividendValue','WebSite','EnterpriseValue','RecomendationMean','currentPrice'])
 
-        for row in rows:
-            info = row
-        return info
+        return ticker_table
+    
+    def consulta_ticker():
+        connection = sqlite3.connect("InvestimentoInfoPy.db")
+        cursor = connection.cursor()
+        select = f"""SELECT * FROM Ticker"""
+        cursor.execute(select)
+        rows = cursor.fetchall()
+        connection.commit()
+        cursor.close()
+     
+        ticker_table = pd.DataFrame(rows,columns=['Ticker','Industry','Sector','fullTimeEmployees','LongName','lastDividendValue','WebSite','EnterpriseValue','RecomendationMean','currentPrice'])
 
+        return ticker_table
 
 
 #info = Ticker.processo_completo(Ticker,ticker_symbol=option)
