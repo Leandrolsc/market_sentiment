@@ -1,11 +1,6 @@
 import streamlit as st
-import investpy as inv
-from Ticker import Ticker
 from Cotacoes import Cotacoes
-from Noticias import Noticias
 import datetime
-import plotly.express as px
-
 
 st.set_page_config(page_title="Inicio"
                     ,page_icon = "🏠"

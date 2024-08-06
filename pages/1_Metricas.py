@@ -74,7 +74,7 @@ with recomendation_mean_4:
 sentimento = Noticias.processo_completo(option)
 max_hist,value_hist,dividend, liquidez_media, sentiment_mean = st.columns(5)
 
-variacao = round(((ticker_table['currentPrice']/dados_cotacao['Adj Close'].max())*100)-100,2)
+variacao = round(((ticker_table['currentPrice']/dados_cotacao['Close'].max())*100)-100,2)
 currentPrice = ticker_table['currentPrice']
 max_hist.metric("Valor Atual"
                 ,value = f"R${float(ticker_table['currentPrice'].iloc[0])}"
@@ -83,7 +83,7 @@ max_hist.metric("Valor Atual"
                 )
 
 value_hist.metric("Variação"
-                  ,f"{round((dados_cotacao['Adj Close'].max()/dados_cotacao['Adj Close'].min())*100,2)}%"
+                  ,f"{round((dados_cotacao['Close'].max()/dados_cotacao['Close'].min())*100,2)}%"
                   ,help = "Quanto a ação já valorizou (Valor Maximo / Valor Minimo * 100 = Variação total)" 
                   )
 
@@ -108,10 +108,10 @@ link = f"{ticker_table['WebSite'].iloc[0]}"
 company = str(ticker_table['LongName'].iloc[0])
 print(company)
 grafico1 = px.line(dados_cotacao
-                   ,x='Data'
-                   ,y="Adj Close"
+                   ,x='Date'
+                   ,y="Close"
                   ).update_layout(
-    xaxis_title="Data"
+    xaxis_title="Date"
     ,yaxis_title = "Cotacao"
     ,title={
         'text': f"<b><a href='{link}'> {option} - {company} </a></b>",

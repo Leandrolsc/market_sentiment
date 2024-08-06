@@ -16,14 +16,14 @@ class Cotacoes():
         cursor = connection.cursor()
         cursor.execute("""CREATE TABLE IF NOT EXISTS Cotacao
                     (Ticker TEXT
+                        ,Date DATE
                         ,Open DECIMAL
                         ,High DECIMAL
                         ,Low DECIMAL
                         ,Close DECIMAL
-                        ,AdjClose DECIMAL
-                        ,Volume INT
-                        ,Data DATE
-                        ,Variacao DECIMAL
+                        ,Volume INT          
+                        ,Dividends DECIMAL           
+                        ,'Stock Splits' DECIMAL
                         ,DataColeta DATETIME
                     );""")       
         return print('Tabela Cotacao criada com sucesso')
@@ -31,15 +31,15 @@ class Cotacoes():
 
     def Acao(self,ticker_symbol,inicio,fim):
         hoje = datetime.date.today()
-        yfin.pdr_override()
-        df = pd.DataFrame(columns=['Ticker','Open','High','Low','Close','Adj Close','Volume','Data','Variacao','DataColeta'])
-        cotacao = web.get_data_yahoo(f'{ticker_symbol}.SA',start=inicio,end=fim)
-        cotacao['Data'] = cotacao.index
-        cotacao['Data'] = cotacao['Data'].dt.tz_localize(None)
-        cotacao['Variacao'] = (cotacao['High']  - cotacao['Low']) / cotacao['Low']  * 100 
+        #yfin.pdr_override()
+        ticker_search = yfin.Ticker(f'{ticker_symbol}.SA')
+        df = pd.DataFrame(columns=['Ticker','Date','Open','High','Low','Close','Volume','Dividends','Stock Splits','DataColeta'])
+        cotacao = ticker_search.history(start=inicio,end=fim)
+        cotacao['Date'] = cotacao.index
+        #cotacao['Date'] = cotacao['Date'].dt.tz_localize(None)
         cotacao['DataColeta'] = hoje
         cotacao['Ticker'] = ticker_symbol
-        df = pd.concat([df, cotacao], ignore_index=True)
+        df = pd.concat([df,cotacao], ignore_index=True)
         return df
 
     def Insert_cotacao(self,df):
@@ -48,24 +48,24 @@ class Cotacoes():
         Cotacoes.CreateTableCotacao(self)            
         decimals = 2
         df['Ticker'] = df['Ticker'].apply(lambda x: str(x) if x is not None else '')
+        df['Date'] = df['Date'].apply(lambda x: x.strftime("%Y-%m-%d") if x is not None else '')
         df['Open'] = df['Open'].apply(lambda x: round(float(x), decimals) if x is not None else 0)
         df['High'] = df['High'].apply(lambda x: round(float(x), decimals) if x is not None else 0)
         df['Low'] = df['Low'].apply(lambda x: round(float(x), decimals) if x is not None else 0)
         df['Close'] = df['Close'].apply(lambda x: round(float(x), decimals) if x is not None else 0)
-        df['Adj Close'] = df['Adj Close'].apply(lambda x: round(float(x), decimals) if not pd.isna(x) else 0)
         df['Volume'] = df['Volume'].apply(lambda x: int(x) if x is not None else 0)
-        df['Data'] = df['Data'].apply(lambda x: x.strftime("%Y-%m-%d") if x is not None else '')
-        df['Variacao'] = df['Variacao'].apply(lambda x: round(float(x), decimals) if x is not None else 0)
+        df['Dividends'] = df['Dividends'].apply(lambda x: round(float(x), decimals) if x is not None else 0)
+        df['Stock Splits'] = df['Stock Splits'].apply(lambda x: round(float(x), decimals) if x is not None else 0)
         df['DataColeta'] = df['DataColeta'].apply(lambda x: str(x) if x is not None else '')
         insert = """INSERT INTO Cotacao (Ticker
+                                            ,Date
                                             ,Open
                                             ,High
                                             ,Low
                                             ,Close
-                                            ,AdjClose
-                                            ,Volume
-                                            ,Data
-                                            ,Variacao
+                                            ,Volume   
+                                            ,Dividends                                      
+                                            ,'Stock Splits'
                                             ,DataColeta)
                             VALUES(?
                                     ,?
@@ -104,7 +104,8 @@ class Cotacoes():
         connection.commit()
         cursor.close()
 
-        cotacao_table = pd.DataFrame(rows, columns=['Ticker','Open','High','Low','Close','Adj Close','Volume','Data','Variacao','DataColeta'])
+        cotacao_table = pd.DataFrame(rows,columns=['Ticker','Date','Open','High','Low','Close','Volume','Dividends','Stock Splits','DataColeta'])
+
 
         return cotacao_table    
     
@@ -117,7 +118,7 @@ class Cotacoes():
         connection.commit()
         cursor.close()
 
-        cotacao_table = pd.DataFrame(rows, columns=['Ticker','Open','High','Low','Close','Adj Close','Volume','Data','Variacao','DataColeta'])
+        cotacao_table = pd.DataFrame(rows,columns=['Ticker','Date','Open','High','Low','Close','Volume','Dividends','Stock Splits','DataColeta'])
 
         return cotacao_table 
 
