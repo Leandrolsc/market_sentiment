@@ -26,7 +26,7 @@ Na tela de metricas temos alguns indicadores de valores das cotações, assim co
 ![alt text](images/metricas1.png)
 
 
-Na tela abaixo pegamos 3 noticias aletorias
+Na tela abaixo pegamos 3 noticias aleatórias
 
 ![alt text](images/metricas2.png)
 
