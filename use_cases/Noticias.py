@@ -3,27 +3,32 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import datetime
 import sqlite3
-from LeIA import SentimentIntensityAnalyzer
-
-
+# Novos imports necessários
+from textblob import TextBlob
 
 class Noticias():
-    def __init__(self,ticker_symbol):
-        self.ticker_symbil = ticker_symbol
+    def __init__(self, ticker_symbol):
+        # Corrigi um pequeno erro de digitação de 'symbil' para 'symbol'
+        self.ticker_symbol = ticker_symbol
+        # Carrega o modelo de análise de sentimento APENAS UMA VEZ.
+        # Isso economiza muito tempo e memória.
 
     def analyze_sentiment(noticia):
-        analyzer = SentimentIntensityAnalyzer()
-        '''Função que recebe um texto como entrada, analisa seu sentimento e interpreta o resultado'''
-        sentiment = analyzer.polarity_scores(noticia)
-        compound_score = sentiment['compound']
+        '''
+        Função que analisa o sentimento usando TextBlob-PT.
+        '''
+        # Cria um objeto TextBlob
+        blob = TextBlob(noticia)
+        
+        # O atributo .sentiment.polarity retorna um valor entre -1.0 e 1.0
+        compound_score = blob.sentiment.polarity
+
         if compound_score >= 0.05:
             return "1"
         elif compound_score <= -0.05:
             return "-1"
         else:
             return "0"
-
-        
 
     def CreateTableNoticia():
         connection = sqlite3.connect("InvestimentoInfoPy.db")

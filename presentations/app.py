@@ -1,15 +1,25 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
 import sys
 import os
+from streamlit_option_menu import option_menu
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from presentations.pages import inicio, metricas, tabelas
+from presentations.custom_pages import metricas, tabelas
 
-st.set_page_config(page_title="Inicio"
-                    ,page_icon = "🏠"
-                    ,layout= 'wide')
+st.set_page_config(
+    page_title="Inicio",
+    page_icon = "🏠",
+    layout= 'wide',
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Report a bug': "https://github.com/Leandrolsc/market_sentiment/issues",
+        'About': """
+        ## Sobre o Projeto
+        market_sentiment é um projeto de análise de sentimento de mercado que utiliza dados de cotações e notícias para fornecer insights valiosos aos investidores.
+        """
+    }
+)
 
 
 
@@ -33,29 +43,13 @@ if escolha == "Tabelas para Download":
 elif escolha == "Métricas":
     metricas.exibir()
 elif escolha == "Inicio":
-    inicio.exibir()
-
     st.title("🏠 Introdução")
     st.markdown("---")
 
-    st.markdown('''
-    Informações sobre ações e analise de sentimento
-    Esse projeto tem como objetivo realizar um ETL dinamico através da ferramenta streamlit, que tem como objetivo a analise das cotações e noticias das ações na Bolsa de Valores do Brasil.
-    Para os dados de cotações será utilizado a API do Yahoo Finance(yfinance) sendo o meio mais prático de se conseguir cotações historicas na internet.
-    Para os dados de noticias foi realizado um webscrapping no Google News, utilizando a biblioteca BeautifulSoap4. 
-    Para a analise de sentimento foi utilizado a biblioteca LeIA para analisar as manchetes.
-    Os dados serão armazenados na memoria utilizando o sqllite.
+    st.markdown("""
 
-    ## 🛠️ Foi Construído com
+    """)
 
-    * [Draw.io](https://app.diagrams.net/?mode=google) - Aplicativo para a Modelagem das ER e Dimensional.
-    * [Visual Code](https://code.visualstudio.com/download) - IDE utilizada para construção dos Scripts em python.
-    * [Streamlit](https://docs.streamlit.io/) - IDE utilizada para construção dos Scripts em python.
-
-
-    Mais informações sobre o projeto no repositório:
-
-    ''')
 
 st.markdown("---")
 st.markdown(
@@ -65,7 +59,7 @@ st.markdown(
         <a href='https://www.linkedin.com/in/leandro-victor-silva-8a319b228/' target='_blank'><b>Leandro Victor Silva</b></a> e 
         Repositório do projeto: 
         <a href='https://github.com/Leandrolsc/market_sentiment' target='_blank'>
-           <b>GitHub - Leandrolsc/PosTech_DataAnalytics_Datathon</b>
+           <b>GitHub - Leandrolsc/market_sentiment</b>
         </a>
     </div>
     """,
