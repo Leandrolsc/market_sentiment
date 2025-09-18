@@ -1,0 +1,10 @@
+beautifulsoup4==4.13.5
+investpy==1.0.8
+LeIA==0.1.0
+pandas==2.3.2
+pandas_datareader==0.10.0
+plotly==6.0.1
+requests_html==0.10.0
+streamlit==1.41.1
+yfinance==0.2.66
+lxml_html_clean==0.4.2
