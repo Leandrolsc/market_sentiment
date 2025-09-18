@@ -40,15 +40,10 @@ elif escolha == "Inicio":
 
     st.markdown('''
     Informações sobre ações e analise de sentimento
-                
     Esse projeto tem como objetivo realizar um ETL dinamico através da ferramenta streamlit, que tem como objetivo a analise das cotações e noticias das ações na Bolsa de Valores do Brasil.
-
     Para os dados de cotações será utilizado a API do Yahoo Finance(yfinance) sendo o meio mais prático de se conseguir cotações historicas na internet.
-
     Para os dados de noticias foi realizado um webscrapping no Google News, utilizando a biblioteca BeautifulSoap4. 
-
     Para a analise de sentimento foi utilizado a biblioteca LeIA para analisar as manchetes.
-
     Os dados serão armazenados na memoria utilizando o sqllite.
 
     ## 🛠️ Foi Construído com
@@ -69,7 +64,7 @@ st.markdown(
         Desenvolvido por: 
         <a href='https://www.linkedin.com/in/leandro-victor-silva-8a319b228/' target='_blank'><b>Leandro Victor Silva</b></a> e 
         Repositório do projeto: 
-        <a href='https://github.com/Leandrolsc/InvestimentoInfoPy' target='_blank'>
+        <a href='https://github.com/Leandrolsc/market_sentiment' target='_blank'>
            <b>GitHub - Leandrolsc/PosTech_DataAnalytics_Datathon</b>
         </a>
     </div>
