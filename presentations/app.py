@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from presentations.custom_pages import metricas, tabelas
 
 st.set_page_config(
-    page_title="Inicio",
+    page_title="Inicio  - Market Sentiment",
     page_icon = "🏠",
     layout= 'wide',
     initial_sidebar_state="expanded",
@@ -43,7 +43,7 @@ if escolha == "Tabelas para Download":
 elif escolha == "Métricas":
     metricas.exibir()
 elif escolha == "Inicio":
-    st.title("🏠 Introdução")
+    st.title("🏠 Inicio - Market Sentiment")
     st.markdown("---")
 
     st.markdown("""
@@ -56,7 +56,8 @@ st.markdown(
     """
     <div style='text-align: center; font-size: 0.95em;'>
         Desenvolvido por: 
-        <a href='https://www.linkedin.com/in/leandro-victor-silva-8a319b228/' target='_blank'><b>Leandro Victor Silva</b></a> e 
+        <a href='https://www.linkedin.com/in/leandro-victor-silva-8a319b228/' target='_blank'><b>Leandro Victor Silva</b></a>
+        <br>
         Repositório do projeto: 
         <a href='https://github.com/Leandrolsc/market_sentiment' target='_blank'>
            <b>GitHub - Leandrolsc/market_sentiment</b>
