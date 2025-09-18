@@ -8,3 +8,4 @@ requests_html==0.10.0
 streamlit==1.41.1
 yfinance==0.2.66
 lxml_html_clean==0.4.2
+streamlit_option_menu==0.4.0
