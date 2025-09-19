@@ -47,7 +47,18 @@ elif escolha == "Inicio":
     st.markdown("---")
 
     st.markdown("""
+    Bem-vindo ao Market Sentiment!
 
+    Este projeto tem como objetivo analisar o mercado financeiro brasileiro por meio da coleta automática de cotações de ações e notícias relevantes, utilizando técnicas de ETL e análise de sentimento. Os dados são apresentados em um dashboard interativo, facilitando a visualização de métricas, tendências e o download de informações para investidores e interessados.
+
+    Principais funcionalidades:
+    - Coleta de cotações históricas de ações da B3 via Yahoo Finance.
+    - Scraping de notícias do Google News relacionadas aos ativos.
+    - Análise de sentimento das manchetes com TextBlob.
+    - Armazenamento dos dados em banco SQLite.
+    - Visualização de métricas, gráficos e tabelas para download.
+
+    Explore as abas ao lado para acessar as métricas e baixar os dados!
     """)
 
 
