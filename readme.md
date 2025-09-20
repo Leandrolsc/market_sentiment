@@ -1,4 +1,4 @@
-# InvestimentoInfoPy - Market Sentiment
+# Market Sentiment
 
 Este projeto realiza análise de ações brasileiras e sentimento de mercado por meio de um ETL dinâmico com [Streamlit](https://docs.streamlit.io/). O objetivo é coletar, armazenar e apresentar cotações históricas e notícias relevantes, fornecendo insights para investidores.
 
